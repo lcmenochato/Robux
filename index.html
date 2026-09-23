@@ -553,7 +553,7 @@ async function pay(){
             ${currentPixCode?`<button class="btn btn-primary copy" onclick="copyPix()">Copiar código PIX</button>`:""}
             <div class="timer" id="timer">30:00</div>
             <div class="status">⏳ Aguardando pagamento...</div>
-            <div class="notice">Pague usando o QR Code ou o código Copia e Cola. Após o pagamento, a GoatPay processará a confirmação.</div>
+            <div class="notice">Pague usando o QR Code ou o código Copia e Cola. Após o pagamento, aguardaremos a confirmação da transação.</div>
         </div>`;
         startTimer();
         if(currentPaymentId) startPaymentStatusPolling(currentPaymentId);
