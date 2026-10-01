@@ -1,5 +1,5 @@
 /**
- * Cloudflare Worker — Dynastia Robux + FlevoPay + TikTok Events API
+ * Cloudflare Worker — Kingdom Robux + FlevoPay + TikTok Events API
  *
  * ROTAS:
  *
@@ -7,8 +7,6 @@
  * GET  /api/status-pix?paymentId=REFERENCE
  * POST /api/tiktok-purchase
  * POST /api/flevopay-webhook
- *
- * FLUXO: create-pix -> status-pix -> pagamento aprovado -> frontend abre upsell
  *
  * CHECKOUT:
  * - Email
@@ -127,24 +125,48 @@ function normalizeStatus(value) {
 }
 
 function extractPix(data) {
+  const root = data?.data && typeof data.data === "object" ? data.data : data;
+  const payment = root?.payment && typeof root.payment === "object" ? root.payment : root;
+
   return {
     copyPaste:
-      data?.qr_code ||
-      data?.qrCode ||
-      data?.pix_code ||
-      data?.copy_paste ||
-      data?.copyPaste ||
+      payment?.qr_code ||
+      payment?.qrCode ||
+      payment?.pix_code ||
+      payment?.copy_paste ||
+      payment?.copyPaste ||
+      root?.qr_code ||
+      root?.qrCode ||
+      root?.pix_code ||
+      root?.copy_paste ||
+      root?.copyPaste ||
       "",
 
     qrCodeBase64:
-      data?.qr_code_base64 ||
-      data?.qrCodeBase64 ||
+      payment?.qr_code_base64 ||
+      payment?.qrCodeBase64 ||
+      root?.qr_code_base64 ||
+      root?.qrCodeBase64 ||
+      "",
+
+    qrCodeUrl:
+      payment?.qrcodeUrl ||
+      payment?.qrCodeUrl ||
+      payment?.qr_url ||
+      root?.qrcodeUrl ||
+      root?.qrCodeUrl ||
+      root?.qr_url ||
       "",
 
     paymentId:
-      data?.transaction_id ??
-      data?.id ??
-      data?.external_id ??
+      payment?.transaction_id ??
+      payment?.transactionId ??
+      payment?.id ??
+      payment?.external_id ??
+      root?.transaction_id ??
+      root?.transactionId ??
+      root?.id ??
+      root?.external_id ??
       ""
   };
 }
@@ -309,7 +331,7 @@ async function createPix(
       body.externalReference,
       120
     ) ||
-    `DYN-${crypto.randomUUID()}`;
+    `KING-${crypto.randomUUID()}`;
 
   /* -----------------------------------------
      DOCUMENTO E TELEFONE
@@ -513,6 +535,12 @@ async function createPix(
       qr_code_base64:
         pix.qrCodeBase64,
 
+      qrcodeUrl:
+        pix.qrCodeUrl || "",
+
+      qrCodeUrl:
+        pix.qrCodeUrl || "",
+
       status:
         normalizeStatus(
           data?.status
@@ -582,17 +610,12 @@ async function findTransaction(
   const transaction =
     transactions.find(
       (item) =>
-        clean(
-          item?.external_id
-        ) === reference ||
-
-        clean(
-          item?.reference
-        ) === reference ||
-
-        clean(
-          item?.id
-        ) === reference
+        clean(item?.external_id) === reference ||
+        clean(item?.externalId) === reference ||
+        clean(item?.external_reference) === reference ||
+        clean(item?.externalReference) === reference ||
+        clean(item?.reference) === reference ||
+        clean(item?.id) === reference
     ) ||
     transactions[0] ||
     null;
@@ -684,7 +707,11 @@ async function statusPix(
 
   const status =
     normalizeStatus(
-      transaction.status
+      transaction?.status ||
+      transaction?.payment_status ||
+      transaction?.paymentStatus ||
+      transaction?.state ||
+      transaction?.data?.status
     );
 
   const paid =
