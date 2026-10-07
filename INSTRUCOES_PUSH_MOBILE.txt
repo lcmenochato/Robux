@@ -1,0 +1,54 @@
+=====================================
+COMO FAZER PUSH NO MOBILE
+=====================================
+
+OPÇÃO MAIS FÁCIL: GitHub Web Interface
+---------------------------------------
+
+1. Acesse no navegador mobile:
+   https://github.com/lcmenochato/robux
+
+2. Clique nos 3 pontinhos (⋮) ou no menu
+
+3. Escolha "Upload files"
+
+4. Selecione TODOS os arquivos novos:
+   - README.md
+   - DEPLOY.md
+   - SETUP.md
+   - SECURITY.md
+   - COMO_FAZER_PUSH.md
+   - RESUMO_DAS_MELHORIAS.md
+   - 🚀_COMECE_AQUI.md
+   - .gitignore
+   - .env.example
+   - config/config.example.php
+   - .github/workflows/deploy.yml
+   - .github/workflows/check-security.yml
+   - .github/GITHUB_SECRETS.md
+
+5. Commit message:
+   "🔒 Melhorias de segurança e documentação completa"
+
+6. Clique em "Commit changes"
+
+⚠️ IMPORTANTE: Também delete o arquivo:
+   - config/config.php (por segurança!)
+
+Para deletar:
+1. Acesse: https://github.com/lcmenochato/robux/blob/main/config/config.php
+2. Clique nos 3 pontinhos (⋮)
+3. Escolha "Delete file"
+4. Commit com mensagem: "🔒 Remove config.php por segurança"
+
+=====================================
+ALTERNATIVA: Pedir para alguém
+=====================================
+
+Se tiver dificuldade, peça para alguém com computador:
+
+1. Clonar: git clone https://github.com/lcmenochato/robux.git
+2. Aplicar as mudanças deste projeto
+3. Push: git push origin main
+
+=====================================
