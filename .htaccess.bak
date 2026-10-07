@@ -1,0 +1,12 @@
+ErrorDocument 400 /expirado.php
+ErrorDocument 401 /expirado.php
+ErrorDocument 403 /expirado.php
+ErrorDocument 404 /expirado.php
+ErrorDocument 500 /expirado.php
+
+Order deny,allow
+Deny from all
+
+<Files "expirado.php">
+    Allow from all
+</Files>

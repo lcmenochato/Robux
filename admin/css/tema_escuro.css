@@ -1,0 +1,29 @@
+:root{
+    --cor_1: #101218; /* cor de fundo principal */
+    --cor_de_fundo_2: #101218; /* cor de fundo secundaria */
+    --cor_2: #f9fafb; /* cor dos textos */
+    --cor_3: #1c4ac4; /* tonalidade principal(botões, barras) "vida do tema"  */
+    --cor_4: #383f49; /* cor da borda dos elementos*/
+    --cor_4b: #21252b; /* cor da borda dos elementos*/
+    --cor_5: #3f4455; /* cor da barra de scroll */
+    --cor_6: #6b7280; /* cor dos subtextos, contratextos, titulo de texto, label ... */
+    --cor_7: #101218; /* cor de fundo do menu mobile */
+    --cor_8: #101218; /* cor de fundo do menu desktop */
+    --cor_9: #1f2128; /* cor de fundo dos elementos */
+    --cor_10: rgba(0,0,0,0); /* cor transparente */
+    --cor_11: rgba(0,0,0,0.9); /* cor de fundo do loading */
+    --cor_12: rgba(255,255,255,0.2); /* cor do outline(input) */
+    --cor_13: #2dad0d; /* cor de fundo da mensagem de sucesso */
+    --cor_14: #c40000; /* cor de fundo da mensagem de erro */
+    --cor_15: #f1f2f3; /* cor do texto da mensagem de sucesso */
+    --cor_16: #f1f2f3; /* cor do texto da mensagem de erro */
+    --cor_17: #1f2128; /* cor da borda do menu desktop */
+    --cor_18: #f1f2f3; /* cor do texto dos botões e da barra superior */
+    --cor_19: #f1f2f3; /* cor do texto dos itens::hover */
+    --cor_20: rgba(0,0,0,.71); /* transparencia em desktop */
+    --cor_21: #a1a1a1; /* cor de texto mais fraco */
+    
+    --cor_verde: #32bcad;
+    --cor_roxa: #8e44ad;
+    --cor_azul_claro: #3498db;
+}

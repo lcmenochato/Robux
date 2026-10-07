@@ -1,24 +1,86 @@
-# Configuração de Cache, Segurança e GZIP gerada pela ROI Clone
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteBase /
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule ^(.*)$ index.html [L]
-</IfModule>
+Options All -Indexes
+Options -MultiViews
+ServerSignature Off
+DirectorySlash Off
 
-<IfModule mod_deflate.c>
-  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript application/json image/svg+xml
-</IfModule>
+<FilesMatch "\.(htaccess|htpasswd|ini|log|sh|inc|bak|save|sql|env|config)$">
+    Require all denied
+</FilesMatch>
 
-# Cache de Mídias e Assets
-<IfModule mod_expires.c>
-  ExpiresActive On
-  ExpiresByType image/jpg "access plus 1 year"
-  ExpiresByType image/jpeg "access plus 1 year"
-  ExpiresByType image/gif "access plus 1 year"
-  ExpiresByType image/png "access plus 1 year"
-  ExpiresByType image/webp "access plus 1 year"
-  ExpiresByType text/css "access plus 1 month"
-  ExpiresByType application/javascript "access plus 1 month"
-</IfModule>
+<FilesMatch "^\.env|^composer\.(json|lock)$|^package\.json$|^\.git">
+    Require all denied
+</FilesMatch>
+
+RewriteEngine On
+RewriteBase /
+
+RewriteRule ^erro/?$ erro.php [L]
+RewriteRule ^erro\.php$ - [L]
+
+RewriteCond %{THE_REQUEST} \s/(config|x9|head|verificarip|utmify|position|pixeltiktok|pixelface|expirado|info|footer|Cloaker|cloacker2) [NC]
+RewriteRule ^ - [F]
+
+RewriteRule ^\.ht - [F,L]
+RewriteRule ^\.git - [F,L]
+RewriteRule ^\.env - [F,L]
+RewriteRule ^composer\.(json|lock)$ - [F,L]
+
+RewriteCond %{THE_REQUEST} \s/config\.php [NC,OR]
+RewriteCond %{THE_REQUEST} \s/config/ [NC]
+RewriteRule ^ - [F,L]
+
+RewriteCond %{REQUEST_URI} ^/api/fontes/(dinBold\.woff2|din\.woff2)$ [NC]
+RewriteRule ^ - [L]
+
+RewriteRule ^(075|0661)/api/?(.*)$ api/$2 [L,QSA]
+
+RewriteRule ^api/?(.*)$ api/index.php [L,QSA]
+
+RewriteCond %{DOCUMENT_ROOT}/js/$1\1.js -f
+RewriteRule ^075/js/(.+)\.js$ /js/$1\1.js [L,QSA]
+RewriteRule ^075/css/(.*)$ /css/$1 [L,QSA]
+RewriteRule ^075/js/(.*)$ /js/$1 [L,QSA]
+
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(\d{9})$ index.php [L,QSA]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(\d{9})/$ index.php [L,QSA]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(\d{9})/(inicio|ofertas|pagamento|passageiros)$ index.php [L,QSA,NC]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(inicio|ofertas|pagamento|passageiros)$ index.php [L,QSA,NC]
+
+RewriteRule ^inicio$ /erro [L]
+
+RewriteCond %{REQUEST_URI} !^/api [NC]
+RewriteCond %{REQUEST_URI} \.php$ [NC]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ /erro [L]
+
+RewriteCond %{THE_REQUEST} \.html [NC]
+RewriteRule ^.*$ /erro [L]
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^(.+)$ $1.php [L,QSA]
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME}\.html -f
+RewriteRule ^(.+)$ $1.html [L,QSA]
+
+ErrorDocument 403 /erro.php
+ErrorDocument 404 /erro.php
+ErrorDocument 500 /erro.php
