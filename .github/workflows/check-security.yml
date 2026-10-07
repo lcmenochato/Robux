@@ -1,0 +1,65 @@
+name: Verificação de Segurança
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  security-check:
+    runs-on: ubuntu-latest
+    name: Verificar Segurança
+    
+    steps:
+    - name: 🚚 Checkout código
+      uses: actions/checkout@v4
+      
+    - name: 🔍 Verificar credenciais expostas
+      run: |
+        echo "Verificando se config.php está sendo commitado..."
+        if [ -f "config/config.php" ]; then
+          echo "⚠️ AVISO: config/config.php não deve estar no repositório!"
+          echo "Este arquivo deve conter apenas configurações de exemplo."
+          exit 1
+        else
+          echo "✅ config/config.php não encontrado (correto)"
+        fi
+        
+    - name: 🔍 Verificar arquivos sensíveis
+      run: |
+        echo "Verificando arquivos sensíveis..."
+        
+        # Lista de padrões a verificar
+        SENSITIVE_PATTERNS=(
+          "password.*=.*['\"][^'\"]{3,}['\"]"
+          "senha.*=.*['\"][^'\"]{3,}['\"]"
+          "api[_-]?key.*=.*['\"][^'\"]{10,}['\"]"
+          "secret.*=.*['\"][^'\"]{10,}['\"]"
+        )
+        
+        FOUND_ISSUES=0
+        
+        for pattern in "${SENSITIVE_PATTERNS[@]}"; do
+          if git grep -E "$pattern" -- '*.php' '*.js' '*.env*' ':!config/config.example.php' > /dev/null 2>&1; then
+            echo "⚠️ Possível credencial exposta encontrada: $pattern"
+            FOUND_ISSUES=1
+          fi
+        done
+        
+        if [ $FOUND_ISSUES -eq 0 ]; then
+          echo "✅ Nenhuma credencial óbvia encontrada"
+        else
+          echo "⚠️ Revise os arquivos acima antes de fazer deploy"
+          exit 1
+        fi
+        
+    - name: 📊 Relatório
+      if: always()
+      run: |
+        echo "==================================="
+        echo "Relatório de Segurança"
+        echo "==================================="
+        echo "Branch: ${{ github.ref_name }}"
+        echo "Commit: ${{ github.sha }}"
+        echo "==================================="

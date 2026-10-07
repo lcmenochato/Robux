@@ -1,0 +1,42 @@
+name: Deploy para Servidor
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy via FTP
+    
+    steps:
+    - name: 🚚 Checkout código
+      uses: actions/checkout@v4
+      
+    - name: 📂 Sincronizar arquivos via FTP
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        server-dir: ${{ secrets.FTP_SERVER_DIR }}
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/config/config.php
+          **/node_modules/**
+          **/vendor/**
+          **/.env
+          **/.DS_Store
+          **/Thumbs.db
+          **/*.log
+          **/cache/**
+          **/tmp/**
+          **/backup/**
+          **/backups/**
+          **/.vscode/**
+          **/.idea/**
+          **/README.md
+          **/DEPLOY.md
+          **/.github/**
